@@ -44,7 +44,7 @@ function generateHTML(data) {
               <div class="row">
                 <div class="col">
                   <div class="photo-header">
-                    <a href="${data.avatar_url}"</a>
+                    <img src="${data.avatar_url}">
                   </div>
                   <div class="card">
                     <h3>Hi!</h3>
