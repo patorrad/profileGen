@@ -1,8 +1,8 @@
 var inquirer = require("inquirer");
 var fs = require("fs");
-const util = require("util");
 const axios = require("axios");
 const generateHTML = require("./generateHTML");
+const convertFactory = require("electron-html-to");
 
 const questions = [
     'What is your GitHub profile name?',
@@ -17,15 +17,23 @@ function checkColor(color) {
 }
 
 function writeToFile(fileName, data) {
-    // let data = {
-    //     color: 'green'
-    //   }
-    //   generateHTML(data);
-    
     fs.writeFile(fileName, generateHTML(data), (err) => {
         if (err) throw err;
         console.log('The file has been saved.');        
     });
+    var conversion = convertFactory({
+        converterPath: convertFactory.converters.PDF
+    });
+    conversion({ html: '<h1>Hello World</h1>' }, function(err, result) {
+        if (err) {
+          return console.error(err);
+        }
+       
+        console.log(result.numberOfPages);
+        console.log(result.logs);
+        result.stream.pipe(fs.createWriteStream('test.pdf'));
+        conversion.kill(); 
+    })
 }
 
 async function getGithub() {
@@ -54,6 +62,7 @@ async function getGithub() {
             if (location[0] != null) data.city = location[0];
             if (location[1] != null) data.state = location[1].trim();
             if (data.bio === null) data.bio = ' '
+            if (data.company === null) data.bio = ' '
             console.log(stars);
             writeToFile('test.html', data);
             
@@ -62,11 +71,7 @@ async function getGithub() {
         }
     } 
 
-function init() {
-    // let data = {color: 'green'};
-    // writeToFile('test.html', data);  
-
-    // console.log(data);  
+function init() { 
     getGithub();
 }
 init();

@@ -48,7 +48,8 @@ function generateHTML(data) {
                   </div>
                   <div class="card">
                     <h3>Hi!</h3>
-                    <h3>My name is MechEa!</h3>                        
+                    <h3>My name is ${data.login}!</h3>
+                    <h6>Currently @ ${data.company}</h6><br>                        
                     <i class="fas fa-location-arrow"></i><a href="https://www.google.com/maps/place/Seattle,WA">&nbsp&nbspSeattle, WA&nbsp&nbsp&nbsp</a>
                     <i class="fab fa-github"></i><a href="">&nbsp&nbspGitHub&nbsp&nbsp&nbsp</a>
                     <i class="fas fa-blog"></i><a href="">&nbsp&nbspBlog</a>
