@@ -6,11 +6,15 @@ const generateHTML = require("./generateHTML");
 
 const questions = [
     'What is your GitHub profile name?',
-    'What color would you like for your profile print out?'
+    'What color would you like for your profile print out? (Options: green, blue, pink or red)',
 ];
 
 
 
+function checkColor(color) {
+    const colors = ['green', 'blue', 'pink', 'red'];
+    return colors.includes(color);
+}
 
 function writeToFile(fileName, data) {
     // let data = {
@@ -26,21 +30,32 @@ function writeToFile(fileName, data) {
 
 async function getGithub() {
         try {
-            const { user } = await inquirer.prompt({
+            //Prompt user
+            const { user, color } = await inquirer.prompt([
+            {
                 message: questions[0],
                 name: "user"
-              });
-            console.log(user);
-            const { color } = await inquirer.prompt({
+            },
+            {
                 message: questions[1],
                 name: "color"
-              });
-            console.log(color);
-            
+            }]);   
+            //Check color input is correct         
+            if (!checkColor(color)) throw 'Chosen color is not an option. Try again.';
+            //Get user data
             const { data } = await axios.get(
-              `https://api.github.com/users/${user}/repos`  
+              `https://api.github.com/users/${user}`  
             );
-            console.log(data);
+            const { stars } = await axios.get(
+              `https://api.github.com/users/${user}/starred`  
+            );
+            data.color = color;
+            let location = data.location.split(',');
+            if (location[0] != null) data.city = location[0];
+            if (location[1] != null) data.state = location[1].trim();
+            if (data.bio === null) data.bio = ' '
+            console.log(stars);
+            writeToFile('test.html', data);
             
         } catch (err) {
             console.log(err);            
@@ -48,8 +63,10 @@ async function getGithub() {
     } 
 
 function init() {
-    let data = {color: 'green'};
-    writeToFile('test.html', data);  
-    //console.log(generateHTML(data));  
+    // let data = {color: 'green'};
+    // writeToFile('test.html', data);  
+
+    // console.log(data);  
+    getGithub();
 }
 init();

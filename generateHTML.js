@@ -26,6 +26,8 @@ const colors = {
 };
 
 function generateHTML(data) {
+  let company = '';
+  if (data.company != null) company = `<h6>Currently @ ${data.company}</h6>`
   return `<!DOCTYPE html>
 <html lang="en">
    <head>
@@ -35,6 +37,61 @@ function generateHTML(data) {
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"/>
       <link href="https://fonts.googleapis.com/css?family=BioRhyme|Cabin&display=swap" rel="stylesheet">
       <title>Document</title>
+      <div class="wrapper">
+        <body>                
+          <main>                
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                  <div class="photo-header">
+                    <a href="${data.avatar_url}"</a>
+                  </div>
+                  <div class="card">
+                    <h3>Hi!</h3>
+                    <h3>My name is MechEa!</h3>                        
+                    <i class="fas fa-location-arrow"></i><a href="https://www.google.com/maps/place/Seattle,WA">&nbsp&nbspSeattle, WA&nbsp&nbsp&nbsp</a>
+                    <i class="fab fa-github"></i><a href="">&nbsp&nbspGitHub&nbsp&nbsp&nbsp</a>
+                    <i class="fas fa-blog"></i><a href="">&nbsp&nbspBlog</a>
+                  </div>
+                </div>                    
+              </div>
+              <div class="row" style="text-align: center;">
+                <div class="col">
+                  <h5>${data.bio}</h5>
+                </div>                    
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="card">
+                    <h5>Public Repositories</h5>
+                    <h5>${data.public_repos}</h5>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <h5>Followers</h5>
+                    <h5>${data.followers}</h5>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="card">
+                    <h5>GitHub Stars</h5>
+                    <h5></h5>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="card">
+                    <h5>Following</h5>
+                    <h5>${data.following}</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </main>         
+        </body>
+      </div>
       <style>
           @page {
             margin: 0;
