@@ -3,7 +3,7 @@ var fs = require("fs");
 const axios = require("axios");
 const generateHTML = require("./generateHTML");
 var pdf = require('html-pdf');
-var html = fs.readFileSync('./test.html', 'utf8');
+var htmlToPdf;
 var options = { format: 'Letter' };
 
 const questions = [
@@ -24,7 +24,8 @@ function writeToFile(fileName, data) {
         if (err) throw err;
         console.log('The file has been saved.');        
     });
-    pdf.create(html, options).toFile('./businesscard.pdf', function(err, res) {
+    let pdfName = "./" + data.login + ".pdf";
+    pdf.create(htmlToPdf, options).toFile(pdfName, function(err, res) {
         if (err) return console.log(err);
         console.log(res); // { filename: '/app/businesscard.pdf' }
     });
@@ -58,7 +59,9 @@ async function getGithub() {
             if (data.bio === null) data.bio = ' '
             if (data.company === null) data.bio = ' '
             console.log(stars);
-            writeToFile('test.html', data);
+            html = "./" + data.login + ".html";
+            htmlToPdf = fs.readFileSync(html, 'utf8');
+            writeToFile(html, data);
             
         } catch (err) {
             console.log(err);            
