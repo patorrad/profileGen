@@ -2,7 +2,9 @@ var inquirer = require("inquirer");
 var fs = require("fs");
 const axios = require("axios");
 const generateHTML = require("./generateHTML");
-const convertFactory = require("electron-html-to");
+var pdf = require('html-pdf');
+var html = fs.readFileSync('./test.html', 'utf8');
+var options = { format: 'Letter' };
 
 const questions = [
     'What is your GitHub profile name?',
@@ -17,23 +19,15 @@ function checkColor(color) {
 }
 
 function writeToFile(fileName, data) {
+
     fs.writeFile(fileName, generateHTML(data), (err) => {
         if (err) throw err;
         console.log('The file has been saved.');        
     });
-    var conversion = convertFactory({
-        converterPath: convertFactory.converters.PDF
+    pdf.create(html, options).toFile('./businesscard.pdf', function(err, res) {
+        if (err) return console.log(err);
+        console.log(res); // { filename: '/app/businesscard.pdf' }
     });
-    conversion({ html: '<h1>Hello World</h1>' }, function(err, result) {
-        if (err) {
-          return console.error(err);
-        }
-       
-        console.log(result.numberOfPages);
-        console.log(result.logs);
-        result.stream.pipe(fs.createWriteStream('test.pdf'));
-        conversion.kill(); 
-    })
 }
 
 async function getGithub() {
